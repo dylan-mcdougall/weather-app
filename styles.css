@@ -1,0 +1,122 @@
+/* Standard for most webpages */
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: #34435E;
+}
+
+/* Create the header along with minimal functionality */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #8EF9F3;
+}
+
+.icon {
+    height: 5rem;
+    width: 5rem;
+    margin-left: .5rem;
+}
+
+
+/* Utilize search container to make modern searchbar */
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border: 2px black solid;
+    border-radius: 16px;
+    padding: 0;
+    background-color: white;
+}
+
+#location {
+    font-size: 14pt;
+    border-radius: 16px;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    outline: none;
+}
+
+
+#submit {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    background-color: white;
+}
+
+#theme {
+    margin-right: 1rem;
+    font-size: 14px;
+    border-radius: 18px;
+    padding: 8px;
+    font-weight: 500;
+    background-color: #C2BBF0;
+}
+
+#theme:hover {
+    background-color: #A675A1;
+    color: whitesmoke;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.weather-info {
+    background-color: whitesmoke;
+    height: 100%;
+    width: 80%;
+    border: 3px solid black;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+}
+
+.overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.weather-details {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.detail-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+}
+
+.detail-icon {
+    height: 2rem;
+    width: 2rem;
+    padding-right: 1rem;
+}
