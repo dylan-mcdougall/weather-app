@@ -1,9 +1,11 @@
 // Create the functions for both the geolocation and the weather apis
 const APIKey = "677aab76914b67304bfb5faeb8d0a18f";
-const searchBar = document.getElementById("location");
+const citySearch = document.getElementById("city-name");
+const stateSearch = document.getElementById("state-code");
+const countrySearch = document.getElementById("country-code");
 const searchButton = document.getElementById("submit");
 const weatherDisplay = document.getElementsByClassName("weather-info");
-const heading = document.getElementById("city-name");
+const heading = document.getElementById("heading");
 const description = document.getElementById("description");
 const currentTemp = document.getElementById("currentTemp");
 const maxTemp = document.getElementById("maxTemp");
@@ -14,7 +16,6 @@ const visibility = document.getElementById("visibility");
 
 document.addEventListener("DOMContentLoaded", event => {
   function geoFetch(input) {
-    input = input.split(' ').join(',')
     if (input) {
       return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=5&appid=${APIKey}`)
         .then(res => {
@@ -65,9 +66,11 @@ document.addEventListener("DOMContentLoaded", event => {
   // Search Bar functionality
 
   searchButton.addEventListener("click", async event => {
-    if (!searchBar.value) return;
+    if (!citySearch.value) return;
 
-    let cityObjects = await geoFetch(searchBar.value);
+    const searchTerms = citySearch.value + "," + stateSearch.value + "," + countrySearch.value;
+
+    let cityObjects = await geoFetch(searchTerms);
     const coords = [cityObjects[0].lat, cityObjects[0].lon];
     if (coords === 404) {
       throw new Error("Invalid location input")
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", event => {
     let tempVar = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${APIKey}`)
     .then(res => res.json())
     console.log(tempVar, "++++++++++++++++++++");
-
+    console.log(tempVar.name, "++++++++++++++++++");
       
     // let data = await weatherFetch(searchBar.value);
     heading.innerText = tempVar.name;
@@ -89,6 +92,8 @@ document.addEventListener("DOMContentLoaded", event => {
     description.innerText = tempVar.weather[0].main;
     wind.innerText = tempVar.wind.speed + " mph";
     visibility.innerText = (tempVar.visibility / 1000) + " km";
-    searchBar.value = "";
+    citySearch.value = "";
+    stateSearch.value = "";
+    countrySearch.value = "";
   })
 })
