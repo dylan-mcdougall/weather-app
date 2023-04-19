@@ -26,6 +26,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    width: 31%;
     border: 2px black solid;
     border-radius: 16px;
     padding: 0;
@@ -37,6 +38,7 @@ header {
     border-radius: 16px;
     font-weight: 500;
     padding: 6px;
+    width: 100%;
     border: none;
     outline: none;
 }

@@ -14,14 +14,13 @@ const visibility = document.getElementById("visibility");
 
 document.addEventListener("DOMContentLoaded", event => {
   function geoFetch(input) {
-    if (typeof input === "string") {
-      return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input.trim()}&limit=5&appid=${APIKey}`)
+    input = input.split(' ').join(',')
+    if (input) {
+      return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=5&appid=${APIKey}`)
         .then(res => {
           if (res.status === 404) return 404;
           else {
-            return res.json().then(json => {
-              return [json[0].lat, json[0].lon]
-            })
+            return res.json()
           }
         })
     }
@@ -39,37 +38,57 @@ document.addEventListener("DOMContentLoaded", event => {
     //     })
     // }
   }
-  async function weatherFetch(input) {
-    let coords = await geoFetch(input);
-    if (coords === 404) {
-      throw new Error("Invalid location input")
-    }
-    const [lat, lon] = coords;
-    return fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${APIKey}`)
-      .then(res => res.json()).then((json) => {
-        return {
-          name: json.name,
-          main: json.main,
-          weather: json.weather,
-          wind: json.wind, 
-          visibility: json.visibility
-        }
-      })
-  }
+  // async function weatherFetch(input) {
+
+  //   let coords = await geoFetch(input);
+  //   coords.map(el => {
+  //     if (el.name)
+  //   })
+  //   if (coords === 404) {
+  //     throw new Error("Invalid location input")
+  //   }
+  //   const [lat, lon] = coords;
+  //   console.log(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat.toFixed(14)}&lon=${lon.toFixed(14)}&appid=${APIKey}`);
+  //   return fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat.toFixed(14)}&lon=${lon.toFixed(14)}&appid=${APIKey}`)
+  //     .then(res => res.json()).then((json) => {
+  //       console.log(json);
+  //       return {
+  //         name: json.name,
+  //         main: json.main,
+  //         weather: json.weather,
+  //         wind: json.wind, 
+  //         visibility: json.visibility
+  //       }
+  //     })
+  // }
 
   // Search Bar functionality
 
   searchButton.addEventListener("click", async event => {
     if (!searchBar.value) return;
-    let data = await weatherFetch(searchBar.value);
-    heading.innerText = data.name;
-    humidity.innerText = data.main.humidity;
-    currentTemp.innerText = data.main.temp;
-    maxTemp.innerText = data.main.temp_max;
-    minTemp.innerText = data.main.temp_min;
-    description.innerText = data.weather.main;
-    wind.innerText = data.wind.speed;
-    visibility.innerText = data.visibility;
+
+    let cityObjects = await geoFetch(searchBar.value);
+    const coords = [cityObjects[0].lat, cityObjects[0].lon];
+    if (coords === 404) {
+      throw new Error("Invalid location input")
+    }
+    const [lat, lon] = coords;
+    
+    
+    let tempVar = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${APIKey}`)
+    .then(res => res.json())
+    console.log(tempVar, "++++++++++++++++++++");
+
+      
+    // let data = await weatherFetch(searchBar.value);
+    heading.innerText = tempVar.name;
+    humidity.innerText = tempVar.main.humidity + "%";
+    currentTemp.innerText = tempVar.main.temp + " °F";
+    maxTemp.innerText = tempVar.main.temp_max  + " °F";
+    minTemp.innerText = tempVar.main.temp_min  + " °F";
+    description.innerText = tempVar.weather[0].main;
+    wind.innerText = tempVar.wind.speed + " mph";
+    visibility.innerText = (tempVar.visibility / 1000) + " km";
     searchBar.value = "";
   })
 })
