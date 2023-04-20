@@ -17,7 +17,7 @@ const visibility = document.getElementById("visibility");
 document.addEventListener("DOMContentLoaded", event => {
   function geoFetch(input) {
     if (input) {
-      return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=5&appid=${APIKey}`)
+      return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input.trim()}&limit=5&appid=${APIKey}`)
         .then(res => {
           if (res.status === 404) return 404;
           else {
@@ -67,33 +67,43 @@ document.addEventListener("DOMContentLoaded", event => {
 
   searchButton.addEventListener("click", async event => {
     if (!citySearch.value) return;
+    if (stateSearch.value && !countrySearch.value) throw new Error("Please include your country code");
 
-    const searchTerms = citySearch.value + "," + stateSearch.value + "," + countrySearch.value;
+    let searchTerms = citySearch.value;
+
+    if (stateSearch.value) searchTerms += `, ${stateSearch.value}`; 
+    if (countrySearch.value) searchTerms += `, ${countrySearch.value}`;
 
     let cityObjects = await geoFetch(searchTerms);
-    const coords = [cityObjects[0].lat, cityObjects[0].lon];
-    if (coords === 404) {
+
+    if (cityObjects === 404) {
       throw new Error("Invalid location input")
     }
-    const [lat, lon] = coords;
-    
-    
-    let tempVar = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${APIKey}`)
-    .then(res => res.json())
-    console.log(tempVar, "++++++++++++++++++++");
-    console.log(tempVar.name, "++++++++++++++++++");
-      
-    // let data = await weatherFetch(searchBar.value);
-    heading.innerText = tempVar.name;
-    humidity.innerText = tempVar.main.humidity + "%";
-    currentTemp.innerText = tempVar.main.temp + " °F";
-    maxTemp.innerText = tempVar.main.temp_max  + " °F";
-    minTemp.innerText = tempVar.main.temp_min  + " °F";
-    description.innerText = tempVar.weather[0].main;
-    wind.innerText = tempVar.wind.speed + " mph";
-    visibility.innerText = (tempVar.visibility / 1000) + " km";
-    citySearch.value = "";
-    stateSearch.value = "";
-    countrySearch.value = "";
+
+    for (let i = 0; i < cityObjects.length; i++) {
+      let currentCity = cityObjects[i];
+      let coords = [currentCity.lat, currentCity.lon];
+      let [lat, lon] = coords;
+
+      let tempVar = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${APIKey}`)
+      .then(res => res.json())
+
+      console.log(tempVar);
+
+      if (tempVar.name === citySearch.value) {
+        heading.innerText = tempVar.name;
+        humidity.innerText = tempVar.main.humidity + "%";
+        currentTemp.innerText = tempVar.main.temp + " °F";
+        maxTemp.innerText = tempVar.main.temp_max + " °F";
+        minTemp.innerText = tempVar.main.temp_min + " °F";
+        description.innerText = tempVar.weather[0].main;
+        wind.innerText = tempVar.wind.speed + " mph";
+        visibility.innerText = (tempVar.visibility / 1000) + " km";
+        citySearch.value = "";
+        stateSearch.value = "";
+        countrySearch.value = "";
+        return;
+      }
+    }
   })
 })
