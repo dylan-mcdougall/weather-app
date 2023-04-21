@@ -20,8 +20,11 @@ header {
     position: absolute;
     top: 20%;
     bottom: 20%;
-    left: 35%;
-    right: 35%;
+    left: 20%;
+    right: 20%;
+    max-width: 500px;
+    max-height: 500px;
+    margin: auto;
     border: 3px solid black;
     border-radius: 20px;
     display: flex;
@@ -37,6 +40,13 @@ header {
     margin-left: .5rem;
 }
 
+.detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 
 /* Utilize search container to make modern searchbar */
 .search-container {
@@ -44,25 +54,34 @@ header {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
+    width: 80%;
+    background-color: grey;
+    border: 2px solid black;
+    border-radius: 20px;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .search {
-    height: 100%;
-    width: 25%;
-    margin: 1rem;
+    height: 15%;
+    width: 80%;
     border: 2px solid black;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 18px;
+    margin: auto;
 }
 
 #submit {
-    height: 100%;
+    height: fit-content;
     width: fit-content;
     border-radius: 20px;
     cursor: pointer;
     border: 2px solid black;
     background-color: lightgrey;
     font-size: 16px;
+    padding: 8px;
+    margin-bottom: 4px;
 }
 
 #submit:hover {
