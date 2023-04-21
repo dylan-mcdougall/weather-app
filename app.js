@@ -13,6 +13,8 @@ const minTemp = document.getElementById("minTemp");
 const humidity = document.getElementById("humidity");
 const wind = document.getElementById("wind");
 const visibility = document.getElementById("visibility");
+const themeButton = document.getElementById("theme");
+let themeIndex = 0;
 
 document.addEventListener("DOMContentLoaded", event => {
   function geoFetch(input) {
@@ -106,4 +108,26 @@ document.addEventListener("DOMContentLoaded", event => {
       }
     }
   })
+})
+
+themeButton.addEventListener("click", event => {
+  let backdrop = document.querySelector("body");
+  let container = document.querySelector("header");
+  let search = document.getElementsByClassName("search-container");
+  let themeArr = [['#537a5a', '#9ae19d', '#252627', '#E9D2F4'], ['#0F0A0A', '#63B0CD', '#E9D2F4', '#E6AACE']]
+
+  if (themeIndex >= themeArr.length) {
+    themeIndex = 0;
+  }
+  backdrop.style.backgroundColor = themeArr[themeIndex][0];
+  container.style.backgroundColor = themeArr[themeIndex][1];
+
+  for (let i = 0; i < search.length; i++) {
+    search[i].style.backgroundColor = themeArr[themeIndex][2];
+  }
+
+  searchButton.style.backgroundColor = themeArr[themeIndex][3];
+  themeButton.style.backgroundColor = themeArr[themeIndex][3];
+  
+  themeIndex++;
 })
